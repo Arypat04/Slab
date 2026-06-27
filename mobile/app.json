@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "Slab",
+    "slug": "slab-app",
+    "scheme": "slab",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Slab needs camera access to photograph your cards for AI grading.",
+        "NSPhotoLibraryUsageDescription": "Slab needs photo library access to import card images.",
+        "UIBackgroundModes": ["remote-notification"]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0d1b17",
+        "foregroundImage": "./assets/icon.png"
+      },
+      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE", "RECEIVE_BOOT_COMPLETED"]
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-font",
+      "expo-splash-screen",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Slab needs camera access to photograph your cards."
+        }
+      ],
+      "expo-notifications"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

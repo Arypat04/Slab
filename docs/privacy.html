@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Slab</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0d1b17;
+      --surface: #111f1a;
+      --border:  #1a2e28;
+      --accent:  #00c2a8;
+      --ink:     #e8f0ed;
+      --muted:   #9fb0aa;
+      --muted2:  #607570;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      padding: 0;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 28px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      color: #04332c;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-name {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 1.4px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .updated {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 40px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    .intro {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 40px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-top: 40px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    p {
+      color: var(--muted);
+      margin-bottom: 14px;
+      font-size: 15px;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0 0 16px 0;
+      padding: 0;
+    }
+
+    ul li {
+      color: var(--muted);
+      font-size: 15px;
+      padding: 6px 0 6px 20px;
+      position: relative;
+    }
+
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 15px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .chip {
+      display: inline-block;
+      background: rgba(0, 194, 168, 0.12);
+      border: 1px solid rgba(0, 194, 168, 0.3);
+      color: var(--accent);
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .third-party-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    @media (max-width: 500px) {
+      .third-party-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 28px; }
+    }
+
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .service-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .service-desc {
+      font-size: 12px;
+      color: var(--muted2);
+      margin: 0;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .contact-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 16px;
+    }
+
+    .contact-box p { margin: 0; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      color: var(--muted2);
+      font-size: 12px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-dot">S</div>
+  <span class="logo-name">Slab</span>
+</header>
+
+<div class="container">
+  <div class="eyebrow">Legal</div>
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated: June 27, 2026</p>
+
+  <div class="intro">
+    Slab is built for collectors who care about accuracy. We collect only what's necessary to make the app work — and we never sell your data.
+  </div>
+
+  <h2>1. What We Collect</h2>
+  <p>Slab collects minimal data to provide AI card grading and collection management:</p>
+  <ul>
+    <li><strong>Card images</strong> — photos you take or import are sent to our backend server for AI analysis. Images are processed and not stored on our servers after analysis is complete.</li>
+    <li><strong>Collection data</strong> — card names, grades, values, and notes you enter are stored locally on your device using device storage. This data never leaves your device unless you explicitly export it.</li>
+    <li><strong>Price alerts</strong> — target prices you set are stored locally on your device.</li>
+    <li><strong>Subscription status</strong> — managed by RevenueCat and your device's app store (Apple or Google). We receive only your entitlement status (Pro vs Free), not payment details.</li>
+    <li><strong>Push notification token</strong> — if you grant permission, used solely for local price alert notifications. We do not send marketing push notifications.</li>
+  </ul>
+
+  <h2>2. How We Use Your Data</h2>
+  <ul>
+    <li>Card images are sent to Google's Gemini AI API to generate grade predictions, sub-grade breakdowns, and defect analysis.</li>
+    <li>Card search queries are sent to our backend server and the Pokémon TCG API to return matching card results and market prices.</li>
+    <li>Subscription status is checked with RevenueCat to determine your tier (Free or Pro).</li>
+    <li>All collection data, price alerts, and preferences are kept on your device only.</li>
+  </ul>
+  <p>We do not use your data for advertising, profiling, or any purpose other than operating the app.</p>
+
+  <h2>3. Third-Party Services</h2>
+  <p>Slab integrates the following third-party services. Each has their own privacy policy:</p>
+  <div class="third-party-grid">
+    <div class="service-card">
+      <div class="service-name">Google Gemini</div>
+      <p class="service-desc">AI analysis of card images for grade prediction. Images are processed per Google's API data usage policy.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-name">RevenueCat</div>
+      <p class="service-desc">Subscription and entitlement management. Handles purchase validation with Apple and Google.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-name">Pokémon TCG API</div>
+      <p class="service-desc">Public card database used for card search. No personal data is shared.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-name">Apple / Google</div>
+      <p class="service-desc">In-app purchases and payment processing are handled entirely by the App Store or Google Play.</p>
+    </div>
+  </div>
+
+  <h2>4. Data Storage &amp; Security</h2>
+  <p>Your card collection, settings, and price alerts are stored locally on your device using encrypted device storage. We do not operate user accounts and do not store personal information on our servers.</p>
+  <p>Card images sent for AI analysis are transmitted over HTTPS and are not retained after processing is complete.</p>
+
+  <h2>5. Children's Privacy</h2>
+  <p>Slab is not directed at children under 13. We do not knowingly collect personal information from children. If you believe a child has provided personal information, please contact us and we will delete it promptly.</p>
+
+  <h2>6. Your Rights</h2>
+  <p>Because we do not store personal data on our servers, there is no account or server-side profile to delete. To remove all Slab data, simply delete the app from your device — this removes all locally stored collection data, settings, and alerts.</p>
+  <p>For data held by third parties (RevenueCat, Google), please refer to their respective privacy policies and data deletion processes.</p>
+
+  <h2>7. Changes to This Policy</h2>
+  <p>We may update this Privacy Policy from time to time. The "Last updated" date at the top of this page reflects when changes were last made. Continued use of Slab after changes constitutes acceptance of the updated policy.</p>
+
+  <h2>8. Contact</h2>
+  <div class="contact-box">
+    <p>Questions about this Privacy Policy? Reach us at <a href="mailto:mcaryanplays@gmail.com">mcaryanplays@gmail.com</a></p>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html">Slab</a> &nbsp;·&nbsp;
+  <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+  <a href="terms.html">Terms of Service</a>
+</footer>
+
+</body>
+</html>
