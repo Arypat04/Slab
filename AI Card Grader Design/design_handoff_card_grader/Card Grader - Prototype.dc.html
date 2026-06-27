@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .cg-num { font-variant-numeric: tabular-nums; }
+  @keyframes cg-scan { 0% { top: 6%; } 100% { top: 86%; } }
+  @keyframes cg-spin { to { transform: rotate(360deg); } }
+  @keyframes cg-fade { from { transform: translateY(10px); } to { transform: translateY(0); } }
+  @keyframes cg-pop { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
+  .cg-app {
+    --bg:#f6f8f7; --surface:#ffffff; --surface-2:#f1f4f3; --ink:#0d1b17; --muted:#7c8a84; --muted-2:#61716b;
+    --line:#eaeeec; --line-2:#e7ecea; --accent:#00c2a8; --accent-deep:#00a892; --accent-ink:#04332c;
+    --slab:#0d1b17; --slab-sub:#7fe9d8; --slab-meta:#b9c6c1; --grade-num:#ffffff; --island:#0d1b17;
+    --footer:#ffffff; --track:#eef2f0; --pos:#18b368; --homebar:#0d1b17; --thumb:repeating-linear-gradient(135deg,#eef2f0,#eef2f0 7px,#e7edea 7px,#e7edea 14px);
+    --warn-bg:#fff7ec; --warn-line:#f6e4c5; --warn-ink:#7a5a17; --warn-sub:#9a7a36; --warn-dot-ink:#ffffff;
+  }
+  .cg-app[data-theme="dark"] {
+    --bg:#0c1714; --surface:#13211c; --surface-2:#15241f; --ink:#ffffff; --muted:#6f827b; --muted-2:#9fb0aa;
+    --line:#20342d; --line-2:#243630; --accent:#00c2a8; --accent-deep:#00c2a8; --accent-ink:#04332c;
+    --slab:linear-gradient(135deg,#11201b,#15302a); --slab-sub:#7fe9d8; --slab-meta:#9fb0aa; --grade-num:#00c2a8; --island:#000000;
+    --footer:#0f1c18; --track:#1f2f29; --pos:#5ee49f; --homebar:#ffffff; --thumb:repeating-linear-gradient(135deg,#1a2823,#1a2823 7px,#16221e 7px,#16221e 14px);
+    --warn-bg:rgba(240,168,58,.1); --warn-line:rgba(240,168,58,.28); --warn-ink:#f0c47a; --warn-sub:#c9a86a; --warn-dot-ink:#0c1714;
+  }
+</style>
+</helmet>
+
+<div style="min-height:100vh; display:flex; align-items:flex-start; justify-content:center; background:#dfe3e1; font-family:'Hanken Grotesk',sans-serif; overflow:hidden; padding:18px 0;">
+  <div style="{{ stageStyle }}">
+    <div class="cg-app" data-theme="{{ theme }}" style="width:390px; height:844px; background:var(--bg); border-radius:46px; border:1px solid rgba(13,30,26,.14); box-shadow:0 24px 60px rgba(13,30,26,.22); overflow:hidden; position:relative; display:flex; flex-direction:column; color:var(--ink);">
+
+      <!-- PERSISTENT STATUS BAR -->
+      <div style="height:54px; flex:none; display:flex; align-items:center; justify-content:space-between; padding:0 28px; position:relative; font-weight:700; font-size:15px; color:var(--ink); z-index:5;">
+        <span class="cg-num">9:41</span>
+        <div style="position:absolute; left:50%; top:12px; transform:translateX(-50%); width:104px; height:30px; background:var(--island); border-radius:16px;"></div>
+        <svg width="64" height="13" viewBox="0 0 64 13" style="fill:var(--ink)"><rect x="0" y="6" width="3" height="7" rx="1"/><rect x="5" y="4" width="3" height="9" rx="1"/><rect x="10" y="2" width="3" height="11" rx="1"/><rect x="15" y="0" width="3" height="13" rx="1"/><path d="M28 4.5a7 7 0 0 1 9 0l-1.4 1.7a4.8 4.8 0 0 0-6.2 0Z"/><path d="M30.4 7.2a3.4 3.4 0 0 1 4.2 0L32.5 9.8Z"/><rect x="46" y="1.5" width="15" height="9" rx="2.5" style="fill:none; stroke:var(--ink); stroke-width:1.2"/><rect x="47.5" y="3" width="11" height="6" rx="1"/><rect x="62" y="4" width="1.6" height="4" rx="0.8"/></svg>
+      </div>
+
+      <!-- SCREEN AREA -->
+      <div style="flex:1; position:relative; overflow:hidden;">
+
+        <!-- ============ ONBOARDING ============ -->
+        <sc-if value="{{ isOnboarding }}" hint-placeholder-val="{{ true }}">
+        <div style="height:100%; display:flex; flex-direction:column; animation:cg-fade .3s ease;">
+          <div style="flex:none; display:flex; justify-content:flex-end; padding:2px 26px;"><span onClick="{{ goPaywall }}" style="font-size:14px; color:var(--muted); font-weight:600; cursor:pointer;">Skip</span></div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 34px;">
+            <div style="position:relative; width:230px; height:296px; margin-bottom:40px;">
+              <div style="position:absolute; inset:0; background:linear-gradient(150deg,rgba(0,194,168,.14),rgba(91,108,255,.14)); border-radius:28px;"></div>
+              <div style="position:absolute; left:30px; top:34px; width:118px; height:166px; border-radius:12px; transform:rotate(-9deg); background:var(--thumb); border:1px solid var(--line-2); box-shadow:0 10px 24px rgba(13,30,26,.16);"></div>
+              <div style="position:absolute; right:26px; bottom:28px; width:118px; height:166px; border-radius:12px; transform:rotate(8deg); background:var(--slab); border:1px solid var(--line-2); box-shadow:0 14px 30px rgba(13,30,26,.24); display:flex; align-items:center; justify-content:center;"><span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:40px; color:#00c2a8;">10</span></div>
+              <div style="position:absolute; right:4px; top:6px; width:46px; height:46px; border-radius:50%; background:#00c2a8; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 16px rgba(0,194,168,.4);"><svg width="20" height="20" viewBox="0 0 20 20" style="fill:none; stroke:#04332c; stroke-width:2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h1L8 2h4l1.5 2h1A2.5 2.5 0 0 1 17 6.5V14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="10" cy="10" r="3"/></svg></div>
+            </div>
+            <sc-if value="{{ slide0 }}" hint-placeholder-val="{{ true }}"><div style="text-align:center;"><div style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:0.12em; color:var(--accent-deep); margin-bottom:14px;">SNAP · GRADE · KNOW</div><h2 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:32px; line-height:1.06; letter-spacing:-0.02em; color:var(--ink); margin:0 0 14px;">AI grading from<br>two photos</h2><p style="font-size:15px; line-height:1.55; color:var(--muted-2); margin:0;">Shoot the front and back, get a predicted PSA grade with sub-grades in seconds.</p></div></sc-if>
+            <sc-if value="{{ slide1 }}" hint-placeholder-val="{{ true }}"><div style="text-align:center;"><div style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:0.12em; color:var(--accent-deep); margin-bottom:14px;">BUY SMARTER</div><h2 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:32px; line-height:1.06; letter-spacing:-0.02em; color:var(--ink); margin:0 0 14px;">Know the value<br>before you buy</h2><p style="font-size:15px; line-height:1.55; color:var(--muted-2); margin:0;">See raw and graded comps plus net ROI before you ever commit cash.</p></div></sc-if>
+            <sc-if value="{{ slide2 }}" hint-placeholder-val="{{ true }}"><div style="text-align:center;"><div style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:0.12em; color:var(--accent-deep); margin-bottom:14px;">TRACK EVERYTHING</div><h2 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:32px; line-height:1.06; letter-spacing:-0.02em; color:var(--ink); margin:0 0 14px;">Watch your<br>collection grow</h2><p style="font-size:15px; line-height:1.55; color:var(--muted-2); margin:0;">Live portfolio value, real gem-rate, and price alerts on every card.</p></div></sc-if>
+          </div>
+          <div style="flex:none; padding:0 32px 26px;">
+            <div style="display:flex; gap:7px; justify-content:center; margin-bottom:22px;"><span style="{{ dot0 }}"></span><span style="{{ dot1 }}"></span><span style="{{ dot2 }}"></span></div>
+            <div onClick="{{ nextSlide }}" style="height:56px; border-radius:18px; background:var(--ink); display:flex; align-items:center; justify-content:center; color:var(--bg); font-weight:700; font-size:16px; cursor:pointer;">Next</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ PAYWALL ============ -->
+        <sc-if value="{{ isPaywall }}" hint-placeholder-val="{{ true }}">
+        <div style="height:100%; display:flex; flex-direction:column; animation:cg-fade .3s ease;">
+          <div style="flex:none; display:flex; justify-content:space-between; align-items:center; padding:2px 22px 8px;"><span onClick="{{ goHome }}" style="font-size:22px; color:var(--muted); cursor:pointer;">✕</span><span style="font-size:13px; color:var(--muted); font-weight:600;">Restore</span></div>
+          <div style="flex:1; overflow:hidden; padding:6px 22px;">
+            <div style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:0.12em; color:var(--accent-deep); margin-bottom:8px;">CARDGRADER PRO</div>
+            <h2 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:30px; line-height:1.05; letter-spacing:-0.02em; color:var(--ink); margin:0 0 18px;">Grade smarter.<br>Buy with an edge.</h2>
+            <div style="display:flex; background:var(--surface-2); border-radius:14px; padding:4px; margin-bottom:18px;"><div style="flex:1; text-align:center; padding:10px; font-size:13px; font-weight:600; color:var(--muted-2);">Monthly</div><div style="flex:1; text-align:center; padding:10px; font-size:13px; font-weight:700; color:var(--ink); background:var(--surface); border-radius:10px; box-shadow:0 2px 6px rgba(13,30,26,.08);">Annual · save 40%</div></div>
+            <div style="background:var(--slab); border-radius:22px; padding:20px; color:#fff; position:relative; overflow:hidden; margin-bottom:12px; border:1px solid var(--line-2);">
+              <div style="position:absolute; right:-26px; top:-26px; width:120px; height:120px; border-radius:50%; background:radial-gradient(circle,#00c2a8 0%,rgba(0,194,168,0) 70%); opacity:.5;"></div>
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;"><div><div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:20px;">Pro</div><div style="font-size:12px; color:#9fb0aa;">Everything, unlimited</div></div><div style="text-align:right;"><div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:26px;">$7<span style="font-size:14px; color:#9fb0aa;">/mo</span></div><div style="font-size:11px; color:#7fe9d8;">billed $84/yr</div></div></div>
+              <div style="height:1px; background:rgba(255,255,255,.12); margin:16px 0;"></div>
+              <div style="display:flex; flex-direction:column; gap:10px; font-size:13px;">
+                <div style="display:flex; gap:9px; align-items:center;"><span style="width:18px; height:18px; border-radius:50%; background:#00c2a8; display:flex; align-items:center; justify-content:center; flex:none;"><svg width="10" height="10" viewBox="0 0 10 10" style="fill:none; stroke:#04332c; stroke-width:2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5 4 7.5 8.5 2.5"/></svg></span>Unlimited scans + sub-grades</div>
+                <div style="display:flex; gap:9px; align-items:center;"><span style="width:18px; height:18px; border-radius:50%; background:#00c2a8; display:flex; align-items:center; justify-content:center; flex:none;"><svg width="10" height="10" viewBox="0 0 10 10" style="fill:none; stroke:#04332c; stroke-width:2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5 4 7.5 8.5 2.5"/></svg></span>Multi-grader + ROI breakdown</div>
+                <div style="display:flex; gap:9px; align-items:center;"><span style="width:18px; height:18px; border-radius:50%; background:#00c2a8; display:flex; align-items:center; justify-content:center; flex:none;"><svg width="10" height="10" viewBox="0 0 10 10" style="fill:none; stroke:#04332c; stroke-width:2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5 4 7.5 8.5 2.5"/></svg></span>Grading Plays + submission tracker</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <div style="flex:1; border:1px solid var(--line-2); border-radius:16px; padding:13px 14px; background:var(--surface);"><div style="font-weight:700; font-size:14px; color:var(--ink);">Plus</div><div class="cg-num" style="font-size:13px; color:var(--muted-2);">$4/mo</div></div>
+              <div style="flex:1; border:1px solid var(--line-2); border-radius:16px; padding:13px 14px; background:var(--surface);"><div style="font-weight:700; font-size:14px; color:var(--ink);">Free</div><div style="font-size:13px; color:var(--muted-2);">10 scans/mo</div></div>
+            </div>
+          </div>
+          <div style="flex:none; padding:8px 22px 26px;">
+            <div onClick="{{ goHome }}" style="height:56px; border-radius:18px; background:#00c2a8; display:flex; align-items:center; justify-content:center; color:#04332c; font-weight:700; font-size:16px; margin-bottom:10px; cursor:pointer;">Start 7-day free trial</div>
+            <div onClick="{{ goHome }}" style="text-align:center; font-size:13px; color:var(--muted); font-weight:600; cursor:pointer;">Continue with Free</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ HOME ============ -->
+        <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div style="height:100%; display:flex; flex-direction:column; animation:cg-fade .3s ease;">
+          <div style="flex:none; display:flex; align-items:center; justify-content:space-between; padding:4px 20px 10px;">
+            <div onClick="{{ goProfile }}" style="display:flex; align-items:center; gap:11px; cursor:pointer;"><div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#00c2a8,#5b6cff);"></div><div><div style="font-size:12px; color:var(--muted);">Good evening</div><div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:16px; color:var(--ink); line-height:1;">Alex</div></div></div>
+            <div style="display:flex; gap:10px;">
+              <div style="width:38px; height:38px; border-radius:50%; background:var(--surface); border:1px solid var(--line-2); display:flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 16 16" style="fill:none; stroke:var(--ink); stroke-width:1.6" stroke-linecap="round"><circle cx="7" cy="7" r="5"/><path d="m14 14-3.5-3.5"/></svg></div>
+              <div style="width:38px; height:38px; border-radius:50%; background:var(--surface); border:1px solid var(--line-2); display:flex; align-items:center; justify-content:center; position:relative;"><svg width="16" height="16" viewBox="0 0 16 16" style="fill:none; stroke:var(--ink); stroke-width:1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2a4 4 0 0 0-4 4c0 4-2 5-2 5h12s-2-1-2-5a4 4 0 0 0-4-4ZM6.5 13.5a1.5 1.5 0 0 0 3 0"/></svg><span style="position:absolute; top:7px; right:8px; width:8px; height:8px; border-radius:50%; background:#f0533f; border:2px solid var(--surface);"></span></div>
+            </div>
+          </div>
+          <div style="flex:1; overflow:hidden; padding:4px 20px 0;">
+            <div style="background:var(--slab); border-radius:24px; padding:20px; color:#fff; margin-bottom:16px; position:relative; overflow:hidden; border:1px solid var(--line-2);">
+              <div style="position:absolute; right:-30px; top:-30px; width:140px; height:140px; border-radius:50%; background:radial-gradient(circle,#00c2a8 0%,rgba(0,194,168,0) 70%); opacity:.45;"></div>
+              <div style="font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.1em; color:#9fb0aa;">PORTFOLIO VALUE</div>
+              <div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:40px; letter-spacing:-0.02em; margin:6px 0 4px;">$12,480</div>
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;"><span style="display:flex; align-items:center; gap:4px; background:rgba(24,179,104,.18); color:#5ee49f; font-weight:700; font-size:12px; padding:3px 9px; border-radius:8px;"><svg width="10" height="10" viewBox="0 0 10 10" style="fill:none; stroke:#5ee49f; stroke-width:2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7 7 2M4 2h3v3"/></svg><span class="cg-num">+8.4%</span></span><span class="cg-num" style="font-size:12px; color:#9fb0aa;">+$968 this month</span></div>
+              <svg width="100%" height="52" viewBox="0 0 320 52" preserveAspectRatio="none"><polyline points="0,40 40,38 80,42 120,30 160,33 200,22 240,26 280,12 320,8" style="fill:none; stroke:#00c2a8; stroke-width:2.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="0,40 40,38 80,42 120,30 160,33 200,22 240,26 280,12 320,8 320,52 0,52" style="fill:rgba(0,194,168,.12); stroke:none"/></svg>
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:16px;">
+              <div style="flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px;"><div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:var(--ink);">342</div><div style="font-size:11px; color:var(--muted-2);">Cards</div></div>
+              <div style="flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px;"><div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:var(--ink);">61</div><div style="font-size:11px; color:var(--muted-2);">Graded</div></div>
+              <div style="flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px;"><div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:var(--accent-deep);">47%</div><div style="font-size:11px; color:var(--muted-2);">Gem rate</div></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><span style="font-weight:700; font-size:15px; color:var(--ink);">Recent grades</span><span onClick="{{ goCollection }}" style="font-size:13px; color:var(--accent-deep); font-weight:600; cursor:pointer;">See all</span></div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div onClick="{{ goDetail }}" style="display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:10px; cursor:pointer;"><div style="width:38px; height:52px; flex:none; border-radius:7px; background:var(--thumb);"></div><div style="flex:1;"><div style="font-weight:700; font-size:14px; color:var(--ink);">Charizard ex</div><div style="font-size:12px; color:var(--muted-2);">Pokémon 151 · #199</div></div><div style="text-align:right;"><div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:16px; color:var(--ink);">PSA 9</div><div class="cg-num" style="font-size:12px; color:var(--pos);">$430</div></div></div>
+              <div onClick="{{ goDetail }}" style="display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:10px; cursor:pointer;"><div style="width:38px; height:52px; flex:none; border-radius:7px; background:var(--thumb);"></div><div style="flex:1;"><div style="font-weight:700; font-size:14px; color:var(--ink);">Connor Bedard RC</div><div style="font-size:12px; color:var(--muted-2);">23-24 UD Young Guns</div></div><div style="text-align:right;"><div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:16px; color:var(--ink);">PSA 9.5</div><div class="cg-num" style="font-size:12px; color:var(--pos);">$310</div></div></div>
+            </div>
+          </div>
+          <!-- TAB BAR (home) -->
+          <div style="flex:none; height:86px; background:var(--footer); border-top:1px solid var(--line); display:flex; align-items:flex-start; padding:12px 24px 0;">
+            <div onClick="{{ goHome }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:var(--accent); stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l8-6 8 6v9a1 1 0 0 1-1 1h-4v-6H8v6H4a1 1 0 0 1-1-1Z"/></svg><span style="font-size:10px; color:var(--accent-deep); font-weight:600;">Home</span></div>
+            <div onClick="{{ goCollection }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:#9aa6a0; stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="16" height="12" rx="2"/><path d="M7 5V3h8v2"/></svg><span style="font-size:10px; color:#9aa6a0;">Collection</span></div>
+            <div style="flex:1; display:flex; justify-content:center;"><div onClick="{{ goScan }}" style="width:58px; height:58px; border-radius:20px; background:#00c2a8; margin-top:-22px; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(0,194,168,.4); cursor:pointer;"><svg width="26" height="26" viewBox="0 0 26 26" style="fill:none; stroke:#04332c; stroke-width:2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.2L9.5 3.5h7L18.3 6h1.2A2.5 2.5 0 0 1 22 8.5V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><circle cx="13" cy="13" r="4"/></svg></div></div>
+            <div onClick="{{ goInsights }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:#9aa6a0; stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V9M9 18V4M15 18v-7"/></svg><span style="font-size:10px; color:#9aa6a0;">Insights</span></div>
+            <div onClick="{{ goProfile }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:#9aa6a0; stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="7" r="4"/><path d="M3 19a8 8 0 0 1 16 0"/></svg><span style="font-size:10px; color:#9aa6a0;">Profile</span></div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ SCAN ============ -->
+        <sc-if value="{{ isScan }}" hint-placeholder-val="{{ true }}">
+        <div style="height:100%; display:flex; flex-direction:column; animation:cg-fade .3s ease;">
+          <div style="flex:none; display:flex; align-items:center; justify-content:space-between; padding:2px 20px 0;">
+            <div onClick="{{ goHome }}" style="width:40px; height:40px; border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center; color:var(--ink); font-size:17px; cursor:pointer;">✕</div>
+            <div style="display:flex; background:var(--surface-2); border-radius:100px; padding:4px;"><span style="padding:8px 16px; border-radius:100px; background:#00c2a8; color:#04332c; font-weight:700; font-size:13px;">Front Only</span><span style="padding:8px 16px; color:var(--muted-2); font-weight:600; font-size:13px;">Front &amp; Back</span></div>
+            <div style="width:40px; height:40px; border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center;"><svg width="17" height="17" viewBox="0 0 17 17" style="fill:#f0a83a; stroke:#f0a83a; stroke-width:1" stroke-linejoin="round"><path d="M9 1 3 9h4l-1 7 6-8H8Z"/></svg></div>
+          </div>
+          <div style="flex:1; position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px 20px;">
+            <div style="position:absolute; inset:14px 20px; background:radial-gradient(120% 80% at 50% 40%,#26302d,#141b19); border-radius:28px;"></div>
+            <div style="position:relative; width:248px; height:344px;">
+              <div style="position:absolute; inset:0; border-radius:18px; background:repeating-linear-gradient(135deg,#20302c,#20302c 8px,#1a2623 8px,#1a2623 16px); border:1px solid #2c3a36;"></div>
+              <span style="position:absolute; top:-3px; left:-3px; width:34px; height:34px; border-top:3px solid #00c2a8; border-left:3px solid #00c2a8; border-radius:14px 0 0 0;"></span>
+              <span style="position:absolute; top:-3px; right:-3px; width:34px; height:34px; border-top:3px solid #00c2a8; border-right:3px solid #00c2a8; border-radius:0 14px 0 0;"></span>
+              <span style="position:absolute; bottom:-3px; left:-3px; width:34px; height:34px; border-bottom:3px solid #00c2a8; border-left:3px solid #00c2a8; border-radius:0 0 0 14px;"></span>
+              <span style="position:absolute; bottom:-3px; right:-3px; width:34px; height:34px; border-bottom:3px solid #00c2a8; border-right:3px solid #00c2a8; border-radius:0 0 14px 0;"></span>
+              <span style="position:absolute; bottom:14px; left:50%; transform:translateX(-50%); font-family:'DM Mono',monospace; font-size:10px; color:#6f827b;">RAW CARD / PSA LABEL</span>
+            </div>
+            <div style="position:absolute; bottom:24px; left:0; right:0; display:flex; justify-content:center;"><span style="display:flex; align-items:center; gap:8px; background:rgba(24,179,104,.2); color:#5ee49f; font-weight:600; font-size:13px; padding:8px 16px; border-radius:100px;"><span style="width:8px; height:8px; border-radius:50%; background:#5ee49f;"></span>Aligned — hold steady</span></div>
+          </div>
+          <div style="flex:none; text-align:center; padding:0 20px 4px;"><span style="font-size:14px; color:var(--muted-2); font-weight:500;">Align your card within the frame</span></div>
+          <div style="flex:none; display:flex; align-items:center; justify-content:space-between; padding:14px 40px 30px;">
+            <div style="width:52px; height:52px; border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center; color:var(--ink); font-weight:700; font-size:13px;">.5×</div>
+            <div onClick="{{ startProcessing }}" style="width:76px; height:76px; border-radius:50%; border:4px solid var(--ink); padding:4px; cursor:pointer;"><div style="width:100%; height:100%; border-radius:50%; background:#00c2a8;"></div></div>
+            <div style="width:52px; height:52px; border-radius:50%; background:var(--surface-2); display:flex; align-items:center; justify-content:center;"><svg width="20" height="20" viewBox="0 0 20 20" style="fill:none; stroke:var(--ink); stroke-width:1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="14" height="12" rx="2"/><circle cx="10" cy="10" r="3"/></svg></div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ ANALYSIS ============ -->
+        <sc-if value="{{ isAnalysis }}" hint-placeholder-val="{{ true }}">
+        <div onClick="{{ goGrade }}" style="height:100%; display:flex; flex-direction:column; animation:cg-fade .3s ease; cursor:pointer;">
+          <div style="flex:none; text-align:center; padding:14px 0 0;"><span style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:0.12em; color:var(--accent-deep);">ANALYZING</span></div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 40px;">
+            <div style="position:relative; width:220px; height:308px; border-radius:16px; overflow:hidden; background:var(--thumb); border:1px solid var(--line-2); box-shadow:0 14px 34px rgba(13,30,26,.16);">
+              <div style="position:absolute; left:6%; right:6%; height:3px; background:linear-gradient(90deg,transparent,#00c2a8,transparent); border-radius:3px; box-shadow:0 0 16px 3px rgba(0,194,168,.7); animation:cg-scan 1.6s ease-in-out infinite alternate; top:6%;"></div>
+            </div>
+            <div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:30px; color:var(--ink); margin-top:28px;">Identifying…</div>
+          </div>
+          <div style="flex:none; padding:0 32px 40px;">
+            <div style="background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:16px;">
+              <div style="display:flex; align-items:center; gap:11px; padding:7px 0;"><span style="width:20px; height:20px; border-radius:50%; background:#00c2a8; display:flex; align-items:center; justify-content:center; flex:none;"><svg width="11" height="11" viewBox="0 0 11 11" style="fill:none; stroke:#04332c; stroke-width:2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5 4.3 8 9 3"/></svg></span><span style="font-size:14px; color:var(--ink); font-weight:600;">Identified card</span></div>
+              <div style="display:flex; align-items:center; gap:11px; padding:7px 0;"><span style="width:20px; height:20px; border-radius:50%; background:#00c2a8; display:flex; align-items:center; justify-content:center; flex:none;"><svg width="11" height="11" viewBox="0 0 11 11" style="fill:none; stroke:#04332c; stroke-width:2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5 4.3 8 9 3"/></svg></span><span style="font-size:14px; color:var(--ink); font-weight:600;">Measured centering</span></div>
+              <div style="display:flex; align-items:center; gap:11px; padding:7px 0;"><span style="width:20px; height:20px; border-radius:50%; border:2px solid #00c2a8; flex:none; display:flex; align-items:center; justify-content:center;"><span style="width:8px; height:8px; border-radius:50%; border:2px solid #00c2a8; border-top-color:transparent; animation:cg-spin .8s linear infinite;"></span></span><span style="font-size:14px; color:var(--ink); font-weight:600;">Detecting defects…</span></div>
+              <div style="display:flex; align-items:center; gap:11px; padding:7px 0; opacity:.45;"><span style="width:20px; height:20px; border-radius:50%; border:2px solid var(--muted); flex:none;"></span><span style="font-size:14px; color:var(--muted-2);">Pricing</span></div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ GRADE RESULT (hybrid) ============ -->
+        <sc-if value="{{ isGrade }}" hint-placeholder-val="{{ true }}">
+        <div style="height:100%; display:flex; flex-direction:column; animation:cg-fade .3s ease;">
+          <div style="flex:none; display:flex; align-items:center; justify-content:space-between; padding:4px 20px 12px;">
+            <div onClick="{{ goHome }}" style="width:38px; height:38px; border-radius:50%; background:var(--surface); border:1px solid var(--line-2); display:flex; align-items:center; justify-content:center; cursor:pointer;"><svg width="9" height="16" viewBox="0 0 9 16" style="fill:none; stroke:var(--ink); stroke-width:2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1 1 8l7 7"/></svg></div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:17px; color:var(--ink);">Grade Result</div>
+            <div onClick="{{ toggleTheme }}" style="display:flex; align-items:center; background:var(--surface); border:1px solid var(--line-2); border-radius:100px; padding:3px; cursor:pointer;"><span style="width:26px; height:26px; border-radius:50%; background:var(--theme-sun-bg,transparent); display:flex; align-items:center; justify-content:center;"><svg width="13" height="13" viewBox="0 0 14 14" style="fill:none; stroke:var(--muted); stroke-width:1.5" stroke-linecap="round"><circle cx="7" cy="7" r="3"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.8 2.8l1 1M10.2 10.2l1 1M11.2 2.8l-1 1M3.8 10.2l-1 1"/></svg></span><span style="width:26px; height:26px; display:flex; align-items:center; justify-content:center;"><svg width="13" height="13" viewBox="0 0 14 14" style="fill:none; stroke:var(--muted); stroke-width:1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 8.5A5 5 0 1 1 5.5 2.5a4 4 0 0 0 6 6Z"/></svg></span></div>
+          </div>
+          <div style="flex:1; overflow:hidden; padding:2px 20px 16px;">
+            <div style="display:flex; gap:14px; align-items:stretch; margin-bottom:16px;">
+              <div style="width:104px; flex:none; border-radius:16px; overflow:hidden; position:relative; background:var(--thumb); border:1px solid var(--line-2);"><div style="position:absolute; top:8px; left:8px; background:var(--ink); color:var(--bg); font-family:'DM Mono',monospace; font-size:9px; padding:3px 6px; border-radius:6px;">FRONT</div></div>
+              <div style="flex:1; background:var(--slab); border:1px solid var(--line-2); border-radius:20px; padding:16px 18px; color:#fff; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between;">
+                <div style="position:absolute; right:-30px; top:-30px; width:120px; height:120px; border-radius:50%; background:radial-gradient(circle,#00c2a8 0%,rgba(0,194,168,0) 70%); opacity:.45;"></div>
+                <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; color:#7fe9d8;">PREDICTED · PSA</div>
+                <div style="display:flex; align-items:baseline; gap:8px;"><span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:58px; line-height:0.85; letter-spacing:-0.02em; color:var(--grade-num);">9</span><span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:17px; color:#7fe9d8;">MINT</span></div>
+                <div style="display:flex; align-items:center; gap:6px; font-size:12px; color:#9fb0aa;"><span style="width:7px; height:7px; border-radius:50%; background:#00c2a8;"></span><span class="cg-num">92% confidence</span></div>
+              </div>
+            </div>
+            <div style="margin-bottom:14px;"><div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:19px; color:var(--ink);">Charizard ex</div><div style="font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); margin-top:3px;">POKÉMON 151 · #199 · HOLO</div></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+              <div style="background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px 14px;"><div style="display:flex; justify-content:space-between; align-items:baseline;"><span style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;">CENTERING</span><span class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:var(--ink);">8.5</span></div><div style="height:4px; background:var(--track); border-radius:3px; margin-top:9px;"><div style="width:85%; height:100%; background:#00c2a8; border-radius:3px;"></div></div></div>
+              <div style="background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px 14px;"><div style="display:flex; justify-content:space-between; align-items:baseline;"><span style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;">CORNERS</span><span class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:var(--ink);">9.0</span></div><div style="height:4px; background:var(--track); border-radius:3px; margin-top:9px;"><div style="width:90%; height:100%; background:#00c2a8; border-radius:3px;"></div></div></div>
+              <div style="background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px 14px;"><div style="display:flex; justify-content:space-between; align-items:baseline;"><span style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;">EDGES</span><span class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:var(--ink);">9.5</span></div><div style="height:4px; background:var(--track); border-radius:3px; margin-top:9px;"><div style="width:95%; height:100%; background:#00c2a8; border-radius:3px;"></div></div></div>
+              <div style="background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px 14px;"><div style="display:flex; justify-content:space-between; align-items:baseline;"><span style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;">SURFACE</span><span class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:var(--ink);">9.0</span></div><div style="height:4px; background:var(--track); border-radius:3px; margin-top:9px;"><div style="width:90%; height:100%; background:#00c2a8; border-radius:3px;"></div></div></div>
+            </div>
+            <div style="background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); margin-bottom:9px;"><span>CENTERING L/R</span><span class="cg-num" style="color:var(--ink); font-weight:500;">55 / 45</span></div>
+              <div style="height:8px; background:var(--track); border-radius:3px; position:relative; overflow:hidden;"><div style="position:absolute; left:0; top:0; width:55%; height:100%; background:#00c2a8;"></div><div style="position:absolute; left:50%; top:-3px; width:1px; height:14px; background:var(--ink);"></div></div>
+            </div>
+            <div style="background:var(--warn-bg); border:1px solid var(--warn-line); border-radius:16px; padding:13px 16px; display:flex; gap:11px;"><div style="width:24px; height:24px; flex:none; border-radius:50%; background:#f0a83a; display:flex; align-items:center; justify-content:center; color:var(--warn-dot-ink); font-weight:800; font-size:13px;">?</div><div><div style="font-weight:700; font-size:13px; color:var(--warn-ink);">Why not a 10?</div><div style="font-size:12px; line-height:1.45; color:var(--warn-sub);">Centering sits slightly left (55/45). Corners are sharp.</div></div></div>
+          </div>
+          <div style="flex:none; padding:12px 20px 14px; background:var(--footer); border-top:1px solid var(--line); display:flex; gap:10px;">
+            <div onClick="{{ goCollection }}" style="flex:none; width:50px; height:50px; border-radius:14px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; cursor:pointer;"><svg width="18" height="18" viewBox="0 0 18 18" style="fill:none; stroke:var(--ink); stroke-width:1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16V8a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v8m6-9V3a1 1 0 0 1 1-1h0a1 1 0 0 1 1 1v4"/></svg></div>
+            <div onClick="{{ goRoi }}" style="flex:1; height:50px; border-radius:14px; background:#00c2a8; display:flex; align-items:center; justify-content:center; color:#04332c; font-weight:700; font-size:15px; cursor:pointer;">See ROI · $58 net</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ ROI ============ -->
+        <sc-if value="{{ isRoi }}" hint-placeholder-val="{{ true }}">
+        <div style="height:100%; display:flex; flex-direction:column; animation:cg-fade .3s ease;">
+          <div style="flex:none; display:flex; align-items:center; justify-content:space-between; padding:4px 20px 12px;">
+            <div onClick="{{ goGrade }}" style="width:38px; height:38px; border-radius:50%; background:var(--surface); border:1px solid var(--line-2); display:flex; align-items:center; justify-content:center; cursor:pointer;"><svg width="9" height="16" viewBox="0 0 9 16" style="fill:none; stroke:var(--ink); stroke-width:2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1 1 8l7 7"/></svg></div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:17px; color:var(--ink);">Worth grading?</div>
+            <div style="width:38px;"></div>
+          </div>
+          <div style="flex:1; overflow:hidden; padding:2px 20px;">
+            <div style="background:var(--slab); border-radius:22px; padding:20px; color:#fff; margin-bottom:14px; position:relative; overflow:hidden; border:1px solid var(--line-2);">
+              <div style="position:absolute; right:-30px; top:-30px; width:130px; height:130px; border-radius:50%; background:radial-gradient(circle,#18b368 0%,rgba(24,179,104,0) 70%); opacity:.5;"></div>
+              <div style="font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.1em; color:#5ee49f;">VERDICT</div>
+              <div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:30px; margin:6px 0 2px;">Yes — grade it</div>
+              <div style="display:flex; align-items:baseline; gap:8px;"><span style="font-size:14px; color:#9fb0aa;">Net expected profit</span><span class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:22px; color:#5ee49f;">+$214</span></div>
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:14px;">
+              <div style="flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px;"><div style="font-size:11px; color:var(--muted-2);">Raw value</div><div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:22px; color:var(--ink);">$95</div></div>
+              <div style="flex:1; background:var(--slab); border-radius:16px; padding:14px; border:1px solid var(--line-2);"><div style="font-size:11px; color:#9fb0aa;">At PSA 10</div><div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:22px; color:#00c2a8;">$420</div></div>
+            </div>
+            <div style="background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:16px; margin-bottom:14px;">
+              <div style="font-weight:700; font-size:13px; color:var(--ink); margin-bottom:14px;">Grade probability</div>
+              <div style="display:flex; align-items:flex-end; gap:10px; height:96px;">
+                <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:100%; height:26%; background:var(--track); border-radius:6px 6px 0 0;"></div><span class="cg-num" style="font-size:10px; color:var(--muted-2);">8</span></div>
+                <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:100%; height:62%; background:#9fe7da; border-radius:6px 6px 0 0;"></div><span class="cg-num" style="font-size:10px; color:var(--muted-2);">9</span></div>
+                <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:100%; height:100%; background:#00c2a8; border-radius:6px 6px 0 0; position:relative;"><span class="cg-num" style="position:absolute; top:-18px; left:50%; transform:translateX(-50%); font-weight:700; font-size:11px; color:var(--accent-deep);">54%</span></div><span class="cg-num" style="font-size:10px; color:var(--ink); font-weight:700;">10</span></div>
+              </div>
+            </div>
+            <div style="background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:6px 16px;">
+              <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px solid var(--line); font-size:13px;"><span style="color:var(--muted-2);">Grading fee (PSA)</span><span class="cg-num" style="color:var(--ink); font-weight:600;">−$19</span></div>
+              <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px solid var(--line); font-size:13px;"><span style="color:var(--muted-2);">Shipping both ways</span><span class="cg-num" style="color:var(--ink); font-weight:600;">−$22</span></div>
+              <div style="display:flex; justify-content:space-between; padding:11px 0; font-size:13px;"><span style="color:var(--muted-2);">Selling fees (12%)</span><span class="cg-num" style="color:var(--ink); font-weight:600;">−$50</span></div>
+            </div>
+          </div>
+          <div style="flex:none; padding:12px 20px 24px;"><div onClick="{{ goHome }}" style="height:54px; border-radius:16px; background:#00c2a8; display:flex; align-items:center; justify-content:center; color:#04332c; font-weight:700; font-size:15px; cursor:pointer;">Add to PSA submission</div></div>
+        </div>
+        </sc-if>
+
+        <!-- ============ COLLECTION ============ -->
+        <sc-if value="{{ isCollection }}" hint-placeholder-val="{{ true }}">
+        <div style="height:100%; display:flex; flex-direction:column; animation:cg-fade .3s ease;">
+          <div style="flex:none; padding:4px 20px 10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;"><div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:24px; color:var(--ink);">Collection</div><div onClick="{{ goScan }}" style="width:38px; height:38px; border-radius:50%; background:var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer;"><svg width="16" height="16" viewBox="0 0 16 16" style="fill:none; stroke:var(--bg); stroke-width:1.8" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg></div></div>
+            <div style="background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:16px; display:flex; align-items:center; justify-content:space-between;"><div><div style="font-size:11px; color:var(--muted-2);">Total value</div><div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:26px; color:var(--ink);">$12,480</div><div class="cg-num" style="font-size:12px; color:var(--pos); font-weight:600;">+$2,140 all-time</div></div><svg width="92" height="48" viewBox="0 0 92 48" preserveAspectRatio="none"><polyline points="0,38 18,34 36,36 54,24 72,28 92,10" style="fill:none; stroke:#00c2a8; stroke-width:2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <div style="flex:none; display:flex; gap:8px; padding:6px 20px 12px; overflow:hidden;">
+            <span style="background:var(--ink); color:var(--bg); font-size:12px; font-weight:600; padding:8px 14px; border-radius:100px; white-space:nowrap;">All · 342</span>
+            <span style="background:var(--surface); border:1px solid var(--line-2); color:var(--muted-2); font-size:12px; font-weight:600; padding:8px 14px; border-radius:100px; white-space:nowrap;">Pokémon</span>
+            <span style="background:var(--surface); border:1px solid var(--line-2); color:var(--muted-2); font-size:12px; font-weight:600; padding:8px 14px; border-radius:100px; white-space:nowrap;">NHL</span>
+            <span style="background:var(--surface); border:1px solid var(--line-2); color:var(--muted-2); font-size:12px; font-weight:600; padding:8px 14px; border-radius:100px; white-space:nowrap;">Graded</span>
+          </div>
+          <div style="flex:1; overflow:hidden; padding:0 20px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div onClick="{{ goDetail }}" style="background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:10px; cursor:pointer;"><div style="height:118px; border-radius:10px; background:var(--thumb); margin-bottom:9px; position:relative;"><span style="position:absolute; top:7px; left:7px; background:var(--ink); color:var(--bg); font-family:'DM Mono',monospace; font-size:9px; padding:2px 6px; border-radius:6px;">PSA 9</span></div><div style="font-weight:700; font-size:13px; color:var(--ink);">Charizard ex</div><div class="cg-num" style="font-size:12px; color:var(--pos); font-weight:600;">$430</div></div>
+              <div onClick="{{ goDetail }}" style="background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:10px; cursor:pointer;"><div style="height:118px; border-radius:10px; background:var(--thumb); margin-bottom:9px; position:relative;"><span style="position:absolute; top:7px; left:7px; background:var(--ink); color:var(--bg); font-family:'DM Mono',monospace; font-size:9px; padding:2px 6px; border-radius:6px;">PSA 9.5</span></div><div style="font-weight:700; font-size:13px; color:var(--ink);">C. Bedard RC</div><div class="cg-num" style="font-size:12px; color:var(--pos); font-weight:600;">$310</div></div>
+              <div onClick="{{ goDetail }}" style="background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:10px; cursor:pointer;"><div style="height:118px; border-radius:10px; background:var(--thumb); margin-bottom:9px; position:relative;"><span style="position:absolute; top:7px; left:7px; background:#5b6cff; color:#fff; font-family:'DM Mono',monospace; font-size:9px; padding:2px 6px; border-radius:6px;">RAW</span></div><div style="font-weight:700; font-size:13px; color:var(--ink);">Pikachu VMAX</div><div class="cg-num" style="font-size:12px; color:var(--muted-2); font-weight:600;">$88</div></div>
+              <div onClick="{{ goDetail }}" style="background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:10px; cursor:pointer;"><div style="height:118px; border-radius:10px; background:var(--thumb); margin-bottom:9px; position:relative;"><span style="position:absolute; top:7px; left:7px; background:var(--ink); color:var(--bg); font-family:'DM Mono',monospace; font-size:9px; padding:2px 6px; border-radius:6px;">PSA 10</span></div><div style="font-weight:700; font-size:13px; color:var(--ink);">C. McDavid</div><div class="cg-num" style="font-size:12px; color:var(--pos); font-weight:600;">$540</div></div>
+            </div>
+          </div>
+          <div style="flex:none; height:86px; background:var(--footer); border-top:1px solid var(--line); display:flex; align-items:flex-start; padding:12px 24px 0;">
+            <div onClick="{{ goHome }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:#9aa6a0; stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l8-6 8 6v9a1 1 0 0 1-1 1h-4v-6H8v6H4a1 1 0 0 1-1-1Z"/></svg><span style="font-size:10px; color:#9aa6a0;">Home</span></div>
+            <div onClick="{{ goCollection }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:var(--accent); stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="16" height="12" rx="2"/><path d="M7 5V3h8v2"/></svg><span style="font-size:10px; color:var(--accent-deep); font-weight:600;">Collection</span></div>
+            <div style="flex:1; display:flex; justify-content:center;"><div onClick="{{ goScan }}" style="width:58px; height:58px; border-radius:20px; background:#00c2a8; margin-top:-22px; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(0,194,168,.4); cursor:pointer;"><svg width="26" height="26" viewBox="0 0 26 26" style="fill:none; stroke:#04332c; stroke-width:2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.2L9.5 3.5h7L18.3 6h1.2A2.5 2.5 0 0 1 22 8.5V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><circle cx="13" cy="13" r="4"/></svg></div></div>
+            <div onClick="{{ goInsights }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:#9aa6a0; stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V9M9 18V4M15 18v-7"/></svg><span style="font-size:10px; color:#9aa6a0;">Insights</span></div>
+            <div onClick="{{ goProfile }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:#9aa6a0; stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="7" r="4"/><path d="M3 19a8 8 0 0 1 16 0"/></svg><span style="font-size:10px; color:#9aa6a0;">Profile</span></div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ CARD DETAIL ============ -->
+        <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ true }}">
+        <div style="height:100%; display:flex; flex-direction:column; animation:cg-fade .3s ease;">
+          <div style="flex:none; height:248px; background:var(--slab); position:relative; display:flex; align-items:center; justify-content:center;">
+            <div onClick="{{ goCollection }}" style="position:absolute; top:10px; left:20px; width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.14); display:flex; align-items:center; justify-content:center; cursor:pointer;"><svg width="9" height="16" viewBox="0 0 9 16" style="fill:none; stroke:#fff; stroke-width:2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1 1 8l7 7"/></svg></div>
+            <div style="width:140px; height:196px; border-radius:12px; background:repeating-linear-gradient(135deg,#e9efec,#e9efec 7px,#dfe7e3 7px,#dfe7e3 14px); border:1px solid #cdd6d2; box-shadow:0 16px 40px rgba(0,0,0,.4);"></div>
+            <span style="position:absolute; bottom:12px; left:50%; transform:translateX(-50%); font-family:'DM Mono',monospace; font-size:10px; color:#6f827b;">FRONT · BACK · OVERLAY</span>
+          </div>
+          <div style="flex:1; overflow:hidden; padding:16px 20px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;"><div><div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:22px; color:var(--ink); line-height:1.05;">Charizard ex</div><div style="font-size:13px; color:var(--muted-2); margin-top:2px;">Pokémon 151 · #199 · Holo</div></div><span style="background:var(--ink); color:var(--bg); font-family:'DM Mono',monospace; font-size:12px; padding:7px 11px; border-radius:10px; white-space:nowrap;">PSA 9</span></div>
+            <div style="background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:16px; margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:12px;"><div><div style="font-size:11px; color:var(--muted-2);">Market value</div><div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:26px; color:var(--ink);">$430</div></div><span class="cg-num" style="background:rgba(24,179,104,.12); color:var(--pos); font-weight:700; font-size:12px; padding:4px 9px; border-radius:8px;">+14% 30d</span></div>
+              <svg width="100%" height="56" viewBox="0 0 320 56" preserveAspectRatio="none"><polyline points="0,44 40,40 80,46 120,34 160,30 200,33 240,22 280,18 320,8" style="fill:none; stroke:#00c2a8; stroke-width:2.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="0,44 40,40 80,46 120,34 160,30 200,33 240,22 280,18 320,8 320,56 0,56" style="fill:rgba(0,194,168,.1); stroke:none"/></svg>
+            </div>
+            <div style="background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:6px 16px;">
+              <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px solid var(--line); font-size:13px;"><span style="color:var(--muted-2);">Paid</span><span class="cg-num" style="color:var(--ink); font-weight:600;">$240</span></div>
+              <div style="display:flex; justify-content:space-between; padding:11px 0; border-bottom:1px solid var(--line); font-size:13px;"><span style="color:var(--muted-2);">Profit / loss</span><span class="cg-num" style="color:var(--pos); font-weight:700;">+$190 (+79%)</span></div>
+              <div style="display:flex; justify-content:space-between; padding:11px 0; font-size:13px;"><span style="color:var(--muted-2);">Cert #</span><span class="cg-num" style="color:var(--ink); font-weight:600;">7841 2290</span></div>
+            </div>
+          </div>
+          <div style="flex:none; padding:10px 20px 24px; display:flex; gap:10px;">
+            <div style="flex:none; width:50px; height:50px; border-radius:14px; background:var(--surface-2); display:flex; align-items:center; justify-content:center;"><svg width="18" height="18" viewBox="0 0 18 18" style="fill:none; stroke:var(--ink); stroke-width:1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 16s-6-4-6-8.5A3.5 3.5 0 0 1 9 5a3.5 3.5 0 0 1 6 2.5C15 12 9 16 9 16Z"/></svg></div>
+            <div onClick="{{ goRoi }}" style="flex:1; height:50px; border-radius:14px; background:#00c2a8; display:flex; align-items:center; justify-content:center; color:#04332c; font-weight:700; font-size:15px; cursor:pointer;">See ROI</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ INSIGHTS ============ -->
+        <sc-if value="{{ isInsights }}" hint-placeholder-val="{{ true }}">
+        <div style="height:100%; display:flex; flex-direction:column; animation:cg-fade .3s ease;">
+          <div style="flex:none; padding:4px 20px 8px;"><div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:24px; color:var(--ink);">Insights</div></div>
+          <div style="flex:1; overflow:hidden; padding:6px 20px 0;">
+            <div style="display:flex; gap:10px; margin-bottom:14px;">
+              <div style="flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px;"><div style="font-size:11px; color:var(--muted-2);">Gem rate</div><div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:22px; color:var(--accent-deep);">47%</div><div class="cg-num" style="font-size:11px; color:var(--pos);">+6 vs predicted</div></div>
+              <div style="flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px;"><div style="font-size:11px; color:var(--muted-2);">Best month</div><div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:22px; color:var(--ink);">+$968</div><div class="cg-num" style="font-size:11px; color:var(--muted-2);">June</div></div>
+            </div>
+            <div style="background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:16px; margin-bottom:14px;">
+              <div style="font-weight:700; font-size:14px; color:var(--ink); margin-bottom:14px;">Allocation</div>
+              <div style="display:flex; height:14px; border-radius:7px; overflow:hidden; margin-bottom:12px;"><div style="width:52%; background:#00c2a8;"></div><div style="width:30%; background:#5b6cff;"></div><div style="width:18%; background:#f0a83a;"></div></div>
+              <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+                <div style="display:flex; justify-content:space-between;"><span style="display:flex; align-items:center; gap:8px; color:var(--muted-2);"><span style="width:9px; height:9px; border-radius:3px; background:#00c2a8;"></span>Pokémon</span><span class="cg-num" style="color:var(--ink); font-weight:600;">$6,490</span></div>
+                <div style="display:flex; justify-content:space-between;"><span style="display:flex; align-items:center; gap:8px; color:var(--muted-2);"><span style="width:9px; height:9px; border-radius:3px; background:#5b6cff;"></span>NHL</span><span class="cg-num" style="color:var(--ink); font-weight:600;">$3,740</span></div>
+                <div style="display:flex; justify-content:space-between;"><span style="display:flex; align-items:center; gap:8px; color:var(--muted-2);"><span style="width:9px; height:9px; border-radius:3px; background:#f0a83a;"></span>Other</span><span class="cg-num" style="color:var(--ink); font-weight:600;">$2,250</span></div>
+              </div>
+            </div>
+            <div style="font-weight:700; font-size:14px; color:var(--ink); margin-bottom:10px;">Top performers</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:10px;"><div style="width:34px; height:46px; flex:none; border-radius:6px; background:var(--thumb);"></div><div style="flex:1;"><div style="font-weight:700; font-size:13px; color:var(--ink);">C. McDavid PSA 10</div><div style="font-size:11px; color:var(--muted-2);">23-24 UD</div></div><div class="cg-num" style="font-weight:700; font-size:13px; color:var(--pos);">+128%</div></div>
+              <div style="display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:10px;"><div style="width:34px; height:46px; flex:none; border-radius:6px; background:var(--thumb);"></div><div style="flex:1;"><div style="font-weight:700; font-size:13px; color:var(--ink);">Charizard ex PSA 9</div><div style="font-size:11px; color:var(--muted-2);">Pokémon 151</div></div><div class="cg-num" style="font-weight:700; font-size:13px; color:var(--pos);">+79%</div></div>
+            </div>
+          </div>
+          <div style="flex:none; height:86px; background:var(--footer); border-top:1px solid var(--line); display:flex; align-items:flex-start; padding:12px 24px 0;">
+            <div onClick="{{ goHome }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:#9aa6a0; stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l8-6 8 6v9a1 1 0 0 1-1 1h-4v-6H8v6H4a1 1 0 0 1-1-1Z"/></svg><span style="font-size:10px; color:#9aa6a0;">Home</span></div>
+            <div onClick="{{ goCollection }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:#9aa6a0; stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="16" height="12" rx="2"/><path d="M7 5V3h8v2"/></svg><span style="font-size:10px; color:#9aa6a0;">Collection</span></div>
+            <div style="flex:1; display:flex; justify-content:center;"><div onClick="{{ goScan }}" style="width:58px; height:58px; border-radius:20px; background:#00c2a8; margin-top:-22px; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(0,194,168,.4); cursor:pointer;"><svg width="26" height="26" viewBox="0 0 26 26" style="fill:none; stroke:#04332c; stroke-width:2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.2L9.5 3.5h7L18.3 6h1.2A2.5 2.5 0 0 1 22 8.5V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><circle cx="13" cy="13" r="4"/></svg></div></div>
+            <div onClick="{{ goInsights }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:var(--accent); stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V9M9 18V4M15 18v-7"/></svg><span style="font-size:10px; color:var(--accent-deep); font-weight:600;">Insights</span></div>
+            <div onClick="{{ goProfile }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:#9aa6a0; stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="7" r="4"/><path d="M3 19a8 8 0 0 1 16 0"/></svg><span style="font-size:10px; color:#9aa6a0;">Profile</span></div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ PROFILE ============ -->
+        <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ true }}">
+        <div style="height:100%; display:flex; flex-direction:column; animation:cg-fade .3s ease;">
+          <div style="flex:1; overflow:hidden; padding:8px 20px 0;">
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;"><div style="width:62px; height:62px; border-radius:50%; background:linear-gradient(135deg,#00c2a8,#5b6cff);"></div><div><div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:22px; color:var(--ink);">Alex Rivera</div><div style="display:inline-flex; align-items:center; gap:6px; margin-top:4px; background:var(--slab); color:#7fe9d8; font-family:'DM Mono',monospace; font-size:11px; padding:4px 10px; border-radius:100px;">PRO MEMBER</div></div></div>
+            <div style="display:flex; gap:10px; margin-bottom:16px;">
+              <div style="flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px; text-align:center;"><div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:19px; color:var(--ink);">$12.5k</div><div style="font-size:11px; color:var(--muted-2);">Value</div></div>
+              <div style="flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px; text-align:center;"><div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:19px; color:var(--ink);">342</div><div style="font-size:11px; color:var(--muted-2);">Cards</div></div>
+              <div style="flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px; text-align:center;"><div class="cg-num" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:19px; color:var(--accent-deep);">47%</div><div style="font-size:11px; color:var(--muted-2);">Gem rate</div></div>
+            </div>
+            <!-- theme toggle row -->
+            <div onClick="{{ toggleTheme }}" style="background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; cursor:pointer;">
+              <div style="display:flex; align-items:center; gap:12px;"><svg width="18" height="18" viewBox="0 0 18 18" style="fill:none; stroke:var(--ink); stroke-width:1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3.5"/><path d="M9 1.5V3M9 15v1.5M1.5 9H3M15 9h1.5M3.5 3.5l1 1M13.5 13.5l1 1M14.5 3.5l-1 1M4.5 13.5l-1 1"/></svg><span style="font-size:14px; color:var(--ink); font-weight:600;">Appearance</span></div>
+              <div style="display:flex; align-items:center; background:var(--surface-2); border-radius:100px; padding:3px; font-size:12px; font-weight:600;"><span style="padding:5px 12px; border-radius:100px; background:var(--ink); color:var(--bg);">Toggle</span></div>
+            </div>
+            <div style="background:var(--surface); border:1px solid var(--line); border-radius:16px; overflow:hidden;">
+              <div onClick="{{ goCollection }}" style="display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--line); cursor:pointer;"><span style="font-size:14px; color:var(--ink); font-weight:600;">My Showcase</span><span style="color:var(--muted);">›</span></div>
+              <div onClick="{{ goInsights }}" style="display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--line); cursor:pointer;"><span style="font-size:14px; color:var(--ink); font-weight:600;">Submissions &amp; goals</span><span style="color:var(--muted);">›</span></div>
+              <div onClick="{{ goPaywall }}" style="display:flex; align-items:center; justify-content:space-between; padding:14px 16px; cursor:pointer;"><span style="font-size:14px; color:var(--ink); font-weight:600;">Manage subscription</span><span style="color:var(--muted);">›</span></div>
+            </div>
+          </div>
+          <div style="flex:none; height:86px; background:var(--footer); border-top:1px solid var(--line); display:flex; align-items:flex-start; padding:12px 24px 0;">
+            <div onClick="{{ goHome }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:#9aa6a0; stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l8-6 8 6v9a1 1 0 0 1-1 1h-4v-6H8v6H4a1 1 0 0 1-1-1Z"/></svg><span style="font-size:10px; color:#9aa6a0;">Home</span></div>
+            <div onClick="{{ goCollection }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:#9aa6a0; stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="16" height="12" rx="2"/><path d="M7 5V3h8v2"/></svg><span style="font-size:10px; color:#9aa6a0;">Collection</span></div>
+            <div style="flex:1; display:flex; justify-content:center;"><div onClick="{{ goScan }}" style="width:58px; height:58px; border-radius:20px; background:#00c2a8; margin-top:-22px; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(0,194,168,.4); cursor:pointer;"><svg width="26" height="26" viewBox="0 0 26 26" style="fill:none; stroke:#04332c; stroke-width:2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.2L9.5 3.5h7L18.3 6h1.2A2.5 2.5 0 0 1 22 8.5V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><circle cx="13" cy="13" r="4"/></svg></div></div>
+            <div onClick="{{ goInsights }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:#9aa6a0; stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V9M9 18V4M15 18v-7"/></svg><span style="font-size:10px; color:#9aa6a0;">Insights</span></div>
+            <div onClick="{{ goProfile }}" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 22 22" style="fill:none; stroke:var(--accent); stroke-width:1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="7" r="4"/><path d="M3 19a8 8 0 0 1 16 0"/></svg><span style="font-size:10px; color:var(--accent-deep); font-weight:600;">Profile</span></div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- MORE-SCREENS -->
+
+      </div>
+
+      <!-- HOME INDICATOR -->
+      <div style="position:absolute; bottom:8px; left:50%; transform:translateX(-50%); width:134px; height:5px; border-radius:3px; background:var(--homebar); opacity:.85; z-index:6; pointer-events:none;"></div>
+    </div>
+    <div style="text-align:center; margin-top:14px; font-family:'DM Mono',monospace; font-size:11px; color:#9aa6a0; letter-spacing:0.04em;">INTERACTIVE PROTOTYPE · TAP TO NAVIGATE</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:430,&quot;height&quot;:920}}">
+class Component extends DCLogic {
+  state = { screen: 'onboarding', theme: 'light', slide: 0, scale: 1 };
+  componentDidMount() {
+    this._fit = () => { const s = Math.min(1, (window.innerHeight - 30) / 902); this.setState({ scale: s }); };
+    this._fit();
+    window.addEventListener('resize', this._fit);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._fit); clearTimeout(this._t); }
+  renderVals() {
+    const st = this.state;
+    const go = (n) => () => { clearTimeout(this._t); this.setState({ screen: n }); };
+    const dot = (i) => st.slide === i
+      ? { display: 'inline-block', width: '24px', height: '7px', borderRadius: '4px', background: 'var(--accent)' }
+      : { display: 'inline-block', width: '7px', height: '7px', borderRadius: '4px', background: '#cdd6d2' };
+    return {
+      theme: st.theme,
+      stageStyle: { transform: `scale(${st.scale})`, transformOrigin: 'center top' },
+      isOnboarding: st.screen === 'onboarding', isPaywall: st.screen === 'paywall', isHome: st.screen === 'home',
+      isScan: st.screen === 'scan', isAnalysis: st.screen === 'analysis', isGrade: st.screen === 'grade',
+      isRoi: st.screen === 'roi', isCollection: st.screen === 'collection', isDetail: st.screen === 'detail',
+      isInsights: st.screen === 'insights', isProfile: st.screen === 'profile',
+      slide0: st.slide === 0, slide1: st.slide === 1, slide2: st.slide === 2,
+      dot0: dot(0), dot1: dot(1), dot2: dot(2),
+      goOnboarding: go('onboarding'), goPaywall: go('paywall'), goHome: go('home'),
+      goScan: go('scan'), goGrade: go('grade'), goRoi: go('roi'),
+      goCollection: go('collection'), goDetail: go('detail'),
+      goInsights: go('insights'), goProfile: go('profile'),
+      toggleTheme: () => this.setState(s => ({ theme: s.theme === 'light' ? 'dark' : 'light' })),
+      nextSlide: () => this.setState(s => s.slide < 2 ? { slide: s.slide + 1 } : { screen: 'paywall' }),
+      startProcessing: () => { clearTimeout(this._t); this.setState({ screen: 'analysis' }); this._t = setTimeout(() => this.setState({ screen: 'grade' }), 2300); },
+    };
+  }
+}
+</script>
+</body>
+</html>

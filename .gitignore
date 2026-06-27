@@ -7,11 +7,15 @@
 **/.env.*.local
 
 # Expo / React Native
+.expo/
 mobile/.expo/
 mobile/dist/
 mobile/android/
 mobile/ios/
 mobile/.expo-shared/
+
+# Claude Code project data
+.claude/
 
 # Backend build output
 backend/dist/

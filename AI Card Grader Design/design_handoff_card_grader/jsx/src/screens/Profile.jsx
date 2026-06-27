@@ -1,0 +1,34 @@
+import React from 'react';
+import { s } from '../style.js';
+
+export default function Profile(p) {
+  return (
+<div style={s("height:100%; display:flex; flex-direction:column; animation:cg-fade .3s ease;")}>
+          <div style={s("flex:1; overflow:hidden; padding:8px 20px 0;")}>
+            <div style={s("display:flex; align-items:center; gap:14px; margin-bottom:18px;")}><div style={s("width:62px; height:62px; border-radius:50%; background:linear-gradient(135deg,#00c2a8,#5b6cff);")}></div><div><div style={s("font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:22px; color:var(--ink);")}>Alex Rivera</div><div style={s("display:inline-flex; align-items:center; gap:6px; margin-top:4px; background:var(--slab); color:#7fe9d8; font-family:'DM Mono',monospace; font-size:11px; padding:4px 10px; border-radius:100px;")}>PRO MEMBER</div></div></div>
+            <div style={s("display:flex; gap:10px; margin-bottom:16px;")}>
+              <div style={s("flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px; text-align:center;")}><div className="cg-num" style={s("font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:19px; color:var(--ink);")}>$12.5k</div><div style={s("font-size:11px; color:var(--muted-2);")}>Value</div></div>
+              <div style={s("flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px; text-align:center;")}><div className="cg-num" style={s("font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:19px; color:var(--ink);")}>342</div><div style={s("font-size:11px; color:var(--muted-2);")}>Cards</div></div>
+              <div style={s("flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px; text-align:center;")}><div className="cg-num" style={s("font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:19px; color:var(--accent-deep);")}>47%</div><div style={s("font-size:11px; color:var(--muted-2);")}>Gem rate</div></div>
+            </div>
+            
+            <div onClick={p.toggleTheme} style={s("background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; cursor:pointer;")}>
+              <div style={s("display:flex; align-items:center; gap:12px;")}><svg width="18" height="18" viewBox="0 0 18 18" style={s("fill:none; stroke:var(--ink); stroke-width:1.6")} strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="9" r="3.5"/><path d="M9 1.5V3M9 15v1.5M1.5 9H3M15 9h1.5M3.5 3.5l1 1M13.5 13.5l1 1M14.5 3.5l-1 1M4.5 13.5l-1 1"/></svg><span style={s("font-size:14px; color:var(--ink); font-weight:600;")}>Appearance</span></div>
+              <div style={s("display:flex; align-items:center; background:var(--surface-2); border-radius:100px; padding:3px; font-size:12px; font-weight:600;")}><span style={s("padding:5px 12px; border-radius:100px; background:var(--ink); color:var(--bg);")}>Toggle</span></div>
+            </div>
+            <div style={s("background:var(--surface); border:1px solid var(--line); border-radius:16px; overflow:hidden;")}>
+              <div onClick={p.goCollection} style={s("display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--line); cursor:pointer;")}><span style={s("font-size:14px; color:var(--ink); font-weight:600;")}>My Showcase</span><span style={s("color:var(--muted);")}>›</span></div>
+              <div onClick={p.goInsights} style={s("display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--line); cursor:pointer;")}><span style={s("font-size:14px; color:var(--ink); font-weight:600;")}>Submissions &amp; goals</span><span style={s("color:var(--muted);")}>›</span></div>
+              <div onClick={p.goPaywall} style={s("display:flex; align-items:center; justify-content:space-between; padding:14px 16px; cursor:pointer;")}><span style={s("font-size:14px; color:var(--ink); font-weight:600;")}>Manage subscription</span><span style={s("color:var(--muted);")}>›</span></div>
+            </div>
+          </div>
+          <div style={s("flex:none; height:86px; background:var(--footer); border-top:1px solid var(--line); display:flex; align-items:flex-start; padding:12px 24px 0;")}>
+            <div onClick={p.goHome} style={s("flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;")}><svg width="22" height="22" viewBox="0 0 22 22" style={s("fill:none; stroke:#9aa6a0; stroke-width:1.8")} strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l8-6 8 6v9a1 1 0 0 1-1 1h-4v-6H8v6H4a1 1 0 0 1-1-1Z"/></svg><span style={s("font-size:10px; color:#9aa6a0;")}>Home</span></div>
+            <div onClick={p.goCollection} style={s("flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;")}><svg width="22" height="22" viewBox="0 0 22 22" style={s("fill:none; stroke:#9aa6a0; stroke-width:1.8")} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="16" height="12" rx="2"/><path d="M7 5V3h8v2"/></svg><span style={s("font-size:10px; color:#9aa6a0;")}>Collection</span></div>
+            <div style={s("flex:1; display:flex; justify-content:center;")}><div onClick={p.goScan} style={s("width:58px; height:58px; border-radius:20px; background:#00c2a8; margin-top:-22px; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(0,194,168,.4); cursor:pointer;")}><svg width="26" height="26" viewBox="0 0 26 26" style={s("fill:none; stroke:#04332c; stroke-width:2.2")} strokeLinecap="round" strokeLinejoin="round"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.2L9.5 3.5h7L18.3 6h1.2A2.5 2.5 0 0 1 22 8.5V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><circle cx="13" cy="13" r="4"/></svg></div></div>
+            <div onClick={p.goInsights} style={s("flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;")}><svg width="22" height="22" viewBox="0 0 22 22" style={s("fill:none; stroke:#9aa6a0; stroke-width:1.8")} strokeLinecap="round" strokeLinejoin="round"><path d="M3 18V9M9 18V4M15 18v-7"/></svg><span style={s("font-size:10px; color:#9aa6a0;")}>Insights</span></div>
+            <div onClick={p.goProfile} style={s("flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;")}><svg width="22" height="22" viewBox="0 0 22 22" style={s("fill:none; stroke:var(--accent); stroke-width:1.8")} strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="7" r="4"/><path d="M3 19a8 8 0 0 1 16 0"/></svg><span style={s("font-size:10px; color:var(--accent-deep); font-weight:600;")}>Profile</span></div>
+          </div>
+        </div>
+  );
+}
