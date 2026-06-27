@@ -2,16 +2,16 @@ import React from 'react';
 import {
   View, Text, Pressable, ScrollView, StyleSheet, SafeAreaView, Switch, Linking,
 } from 'react-native';
-
-const LEGAL_URLS = {
-  privacy: 'https://YOUR_USERNAME.github.io/YOUR_REPO/privacy.html',
-  terms: 'https://YOUR_USERNAME.github.io/YOUR_REPO/terms.html',
-};
 import { router } from 'expo-router';
 import { useTheme } from '../../src/theme';
 import { useAppStore } from '../../src/store/useAppStore';
 import { SunIcon, MoonIcon, ArrowUpIcon } from '../../src/components/Icons';
 import { requestNotificationPermissions, scheduleLocalNotification } from '../../src/services/notifications';
+
+const LEGAL_URLS = {
+  privacy: 'https://Arypat04.github.io/Slab/privacy.html',
+  terms: 'https://Arypat04.github.io/Slab/terms.html',
+};
 
 const TIER_COLORS: Record<string, string> = {
   pro: '#00c2a8',
