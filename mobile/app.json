@@ -9,6 +9,7 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": false,
+      "bundleIdentifier": "com.slab.app",
       "infoPlist": {
         "NSCameraUsageDescription": "Slab needs camera access to photograph your cards for AI grading.",
         "NSPhotoLibraryUsageDescription": "Slab needs photo library access to import card images.",
@@ -16,6 +17,7 @@
       }
     },
     "android": {
+      "package": "com.slab.app",
       "adaptiveIcon": {
         "backgroundColor": "#0d1b17",
         "foregroundImage": "./assets/icon.png"
@@ -28,6 +30,7 @@
     },
     "plugins": [
       "expo-router",
+      "expo-dev-client",
       "expo-secure-store",
       "expo-font",
       "expo-splash-screen",
